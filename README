@@ -7,6 +7,7 @@ The needs for a new sub language were:
 
 Features:
 - Indentations are compulsory and significant
+- new sections and their titles are introduced by 's Section title'
 - new frames and their titles are introduced by '+ Frame title'
 - new blocks and their titles are introduced by 'b Block title'
 - new columns are introduced with a width (proportion to \columnwidth) by 'c{ratio}'
