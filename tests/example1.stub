@@ -1,0 +1,13 @@
++ Example 1
+    b Example block
+        - first item
+            - subitem
+            - other subitem
+        - second item
+    b second block
+        c{0.4}
+            f{0.8}{figure1.png}
+        c{0.6}
+            Some generic text:
+            - and items
+
