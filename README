@@ -1,0 +1,58 @@
+Preprocessor to generate LaTeX-beamer code from a more compact language.
+
+The needs for a new sub language were:
+- compactness: so as to remove type as few formatting informations as possible,
+- expressiveness: allow to format most beamer frames with clear and short syntax,
+- flexibility: allowance for LaTeX without to much overhead.
+
+Features:
+- Indentations are compulsory and significant
+- new frames and their titles are introduced by '+ Frame title'
+- new blocks and their titles are introduced by 'b Block title'
+- new columns are introduced with a width (proportion to \columnwidth) by 'c{ratio}'
+- items are introduced by '- item text' with automatic environment creation
+- figures are included by 'f{ratio}{filename}'
+- everything else is reproduced verbatim
+
+Example:
+"""
++ Example 1
+    b Example block
+        - first item
+            - subitem
+            - other subitem
+        - second item
+    b second block
+        c{0.4}
+            f{0.8}{figure1.png}
+        c{0.6}
+            Some generic text:
+            - and items
+"""
+translates into
+"""
+\begin{frame}
+    \frametitle{Example 1}
+    \begin{block}
+        \begin{itemize}
+            \item first item
+                \begin{itemize}
+                    \item subitem
+                    \item other subitem
+                \end{itemize}
+            \item second item
+        \end{itemize}
+    \end{block}
+    \begin{block}
+        \begin{columns}
+            \column{0.4\columnwidth}
+            \includegraphics[width=0.8\columnwidth]{figure1.png}
+            \column{0.6\columnwidth}
+            Some generic text:
+            \begin{itemize}
+                \item and items
+            \end{itemize}
+        \end{columns}
+    \end{block}
+\end{frame}
+"""
