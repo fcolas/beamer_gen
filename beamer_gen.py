@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 import sys
-
-# TODO use regular expressions
+import re
 
 
 def process_file(filename_in, filename_out):
     """Actual processing of a file."""
+    # regular expressions for various directives
+    frame_re = re.compile(r'^(\s*)\+ (.*)$')
+    section_re = re.compile(r'^s (.*)$')
+    block_re = re.compile(r'^(\s*)b (.*)$')
+    item_re = re.compile(r'^(\s*)- (.*)$')
+    column_re = re.compile(r'^(\s*)c\{(\d*.?\d*)\}$')
+    figure_re = re.compile(r'^(\s*)f\{(\d*.?\d*)\}\{(.*)\}$')
+
+    # TODO store actual indentation levels
     def indent():
         """Return current indentation prefix."""
         # FIXME doesn't work well in case of mixed environments
@@ -18,20 +26,23 @@ def process_file(filename_in, filename_out):
         assert 0 <= n <= len(current_envs)
         for _ in range(n):
             env_name = current_envs.pop()
-            lines.append(indent() + '\\end{{{}}}'.format(env_name))
+            lines.append(indent() + '\\end{{{}}}\n'.format(env_name))
 
     lines = []
     current_envs = []
     for line in open(filename_in):
-        if line.startswith('+ '):  # new frame
+        if frame_re.match(line):  # new frame
+            frame = frame_re.match(line)
             close_envs()  # frame is always top-level environment
-            lines.append('\\begin{frame}\n')
+            lines.append(frame.group(1) + '\\begin{frame}\n')
             current_envs.append('frame')
-            lines.append(indent() + '\\frametitle{{{}}}\n'.format(line[2:-1]))
+            lines.append(frame.group(1) + '    \\frametitle{{{}}}\n'.format(
+                frame.group(2)))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
     close_envs()
+    # TODO reorder all closing environments and empty lines
     with open(filename_out, 'w') as f_out:
         f_out.writelines(lines)
 
