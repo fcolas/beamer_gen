@@ -38,6 +38,10 @@ def process_file(filename_in, filename_out):
             current_envs.append('frame')
             lines.append(frame.group(1) + '    \\frametitle{{{}}}\n'.format(
                 frame.group(2)))
+        elif section_re.match(line):  # new section
+            section = section_re.match(line)
+            close_envs()
+            lines.append('\\section{{{}}}\n'.format(section.group(1)))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments

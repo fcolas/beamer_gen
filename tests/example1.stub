@@ -1,3 +1,5 @@
+s introduction
+
 + Example 1
     b Example block
         - first item
@@ -10,5 +12,13 @@
         c{0.6}
             Some generic text:
             - and items
+
++ Slide 2
+    b block
+        - 1
+        - 2
+
+s Conclusion
+
 
 + Example 2
