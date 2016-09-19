@@ -20,8 +20,10 @@ def process_file(filename_in, filename_out):
         except IndexError:
             return ''
 
-    def close_envs(n=0):
+    def close_envs(n=0, strict=False):
         """Close currently opened environments."""
+        if strict:
+            n += 0.5
         while current_envs:
             if n <= current_envs[-1][1]:
                 env = current_envs.pop()
@@ -51,6 +53,19 @@ def process_file(filename_in, filename_out):
             lines.append(indent() + '\\begin{{block}}{{{}}}\n'.format(
                 block_name))
             current_envs.append(('block', block_indent))
+        elif item_re.match(line):  # new item
+            item = item_re.match(line)
+            item_content = item.group(2)
+            item_indent = len(item.group(1))
+            close_envs(item_indent, strict=True)
+            if current_envs:
+                if current_envs[-1] != ('itemize', item_indent):
+                    close_envs(item_indent)
+                    lines.append(indent() + '\\begin{itemize}\n')
+                    current_envs.append(('itemize', item_indent))
+            else:
+                current_envs.append(('itemize', item_indent))
+            lines.append(indent() + '\\item {}\n'.format(item_content))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
