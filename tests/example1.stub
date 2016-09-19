@@ -10,8 +10,10 @@ s introduction
         c{0.4}
             f{0.8}{figure1.png}
         c{0.6}
-            Some generic text:
-            - and items
+            b Inside block
+                Some generic text:
+                - and items
+    b other block
 
 + Slide 2
     b block

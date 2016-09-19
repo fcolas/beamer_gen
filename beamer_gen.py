@@ -20,14 +20,14 @@ def process_file(filename_in, filename_out):
         except IndexError:
             return ''
 
-    def close_envs(n=None):
+    def close_envs(n=0):
         """Close currently opened environments."""
-        if n is None:
-            n = len(current_envs)
-        assert 0 <= n <= len(current_envs)
-        for _ in range(n):
-            env_name = current_envs.pop()[0]
-            lines.append(indent() + '\\end{{{}}}\n'.format(env_name))
+        while current_envs:
+            if n <= current_envs[-1][1]:
+                env = current_envs.pop()
+                lines.append(indent() + '\\end{{{}}}\n'.format(env[0]))
+            else:
+                break
 
     lines = []
     current_envs = []
@@ -43,6 +43,14 @@ def process_file(filename_in, filename_out):
             section = section_re.match(line)
             close_envs()
             lines.append('\\section{{{}}}\n'.format(section.group(1)))
+        elif block_re.match(line):  # new block
+            block = block_re.match(line)
+            block_name = block.group(2)
+            block_indent = len(block.group(1))
+            close_envs(block_indent)
+            lines.append(indent() + '\\begin{{block}}{{{}}}\n'.format(
+                block_name))
+            current_envs.append(('block', block_indent))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
