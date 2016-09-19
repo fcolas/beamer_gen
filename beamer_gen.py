@@ -80,6 +80,13 @@ def process_file(filename_in, filename_out):
                 current_envs.append(('columns', column_indent))
             lines.append(indent() + '\\column{{{}\\columnwidth}}\n'.format(
                 column_ratio))
+        elif figure_re.match(line):  # figure
+            figure = figure_re.match(line)
+            figure_ratio = figure.group(2)
+            figure_fname = figure.group(3)
+            lines.append(indent() +
+                         '\\includegraphics[{}\\columnwidth]{{{}}}\n'.format(
+                             figure_ratio, figure_fname))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
