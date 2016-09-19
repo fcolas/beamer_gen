@@ -66,6 +66,20 @@ def process_file(filename_in, filename_out):
             else:
                 current_envs.append(('itemize', item_indent))
             lines.append(indent() + '\\item {}\n'.format(item_content))
+        elif column_re.match(line):  # new column
+            column = column_re.match(line)
+            column_ratio = column.group(2)
+            column_indent = len(column.group(1))
+            close_envs(column_indent, strict=True)
+            if current_envs:
+                if current_envs[-1] != ('columns', column_indent):
+                    close_envs(column_indent)
+                    lines.append(indent() + '\\begin{colums}\n')
+                    current_envs.append(('columns', column_indent))
+            else:
+                current_envs.append(('columns', column_indent))
+            lines.append(indent() + '\\column{{{}\\columnwidth}}\n'.format(
+                column_ratio))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
