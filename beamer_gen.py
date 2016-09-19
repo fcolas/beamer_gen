@@ -13,11 +13,12 @@ def process_file(filename_in, filename_out):
     column_re = re.compile(r'^(\s*)c\{(\d*.?\d*)\}$')
     figure_re = re.compile(r'^(\s*)f\{(\d*.?\d*)\}\{(.*)\}$')
 
-    # TODO store actual indentation levels
     def indent():
         """Return current indentation prefix."""
-        # FIXME doesn't work well in case of mixed environments
-        return '    ' * len(current_envs)
+        try:
+            return '    ' + ' ' * current_envs[-1][1]
+        except IndexError:
+            return ''
 
     def close_envs(n=None):
         """Close currently opened environments."""
@@ -25,7 +26,7 @@ def process_file(filename_in, filename_out):
             n = len(current_envs)
         assert 0 <= n <= len(current_envs)
         for _ in range(n):
-            env_name = current_envs.pop()
+            env_name = current_envs.pop()[0]
             lines.append(indent() + '\\end{{{}}}\n'.format(env_name))
 
     lines = []
@@ -35,8 +36,8 @@ def process_file(filename_in, filename_out):
             frame = frame_re.match(line)
             close_envs()  # frame is always top-level environment
             lines.append(frame.group(1) + '\\begin{frame}\n')
-            current_envs.append('frame')
-            lines.append(frame.group(1) + '    \\frametitle{{{}}}\n'.format(
+            current_envs.append(('frame', len(frame.group(1))))
+            lines.append(indent() + '\\frametitle{{{}}}\n'.format(
                 frame.group(2)))
         elif section_re.match(line):  # new section
             section = section_re.match(line)
