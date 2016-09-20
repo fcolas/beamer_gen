@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import sys
 import re
+import argparse
+import pathlib  # python 3.4
 
 
 def process_file(filename_in, filename_out):
@@ -95,6 +97,7 @@ def process_file(filename_in, filename_out):
             lines.append(line)
     # close all remaining environments
     close_envs()
+    # TODO handle comments at the correct indentation level
     # reorder all closing environments and empty lines
     i, N = 0, len(lines) - 1
     while i < N:
@@ -111,9 +114,13 @@ def process_file(filename_in, filename_out):
 
 def main():
     """Command line parsing."""
-    # TODO real argument parsing
-    for filename_in in sys.argv[1:]:
-        process_file(filename_in, filename_in+'.tex')
+    parser = argparse.ArgumentParser(
+        description='Generate LaTeX/beamer files from a stub.')
+    parser.add_argument('filenames', metavar='filename', type=str, nargs='+',
+                        help='name of the file to be processed.')
+    args = parser.parse_args(sys.argv[1:])
+    for fn in args.filenames:
+        process_file(fn, str(pathlib.Path(fn).with_suffix('.tex')))
 
 if __name__ == '__main__':
     main()
