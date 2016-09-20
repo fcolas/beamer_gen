@@ -12,6 +12,8 @@ def process_file(filename_in, filename_out):
     item_re = re.compile(r'^(\s*)- (.*)$')
     column_re = re.compile(r'^(\s*)c\{([^}]*)\}(.*)$')
     figure_re = re.compile(r'^(\s*)f\{([^}]*)\}\{([^}]*)\}(.*)$')
+    empty_re = re.compile(r'^\s*$')
+    end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
 
     def indent():
         """Return current indentation prefix."""
@@ -93,7 +95,16 @@ def process_file(filename_in, filename_out):
             lines.append(line)
     # close all remaining environments
     close_envs()
-    # TODO reorder all closing environments and empty lines
+    # reorder all closing environments and empty lines
+    i, N = 0, len(lines) - 1
+    while i < N:
+        if empty_re.match(lines[i]) and end_re.match(lines[i+1]):
+            tmp = lines[i+1]
+            lines[i+1] = lines[i]
+            lines[i] = tmp
+            i = max(0, i-1)
+        else:
+            i += 1
     with open(filename_out, 'w') as f_out:
         f_out.writelines(lines)
 

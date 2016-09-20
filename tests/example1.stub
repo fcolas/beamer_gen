@@ -5,20 +5,26 @@ s introduction
         - first item
             - subitem
             - other subitem
+
+
         - second item
     b second block
         c{0.4}
             f{0.8}{figure1.png}\\legend
+
+
         c{0.6}
             b Inside block
                 Some generic text:
                 - and items
+
     b other block
 
 + Slide 2
     b block
         - 1
         - 2
+
 
 s Conclusion
 
