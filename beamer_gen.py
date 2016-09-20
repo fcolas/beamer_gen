@@ -79,7 +79,7 @@ def process_file(filename_in, filename_out):
             if current_envs:
                 if current_envs[-1] != ('columns', column_indent):
                     close_envs(column_indent)
-                    lines.append(indent() + '\\begin{colums}\n')
+                    lines.append(indent() + '\\begin{columns}\n')
                     current_envs.append(('columns', column_indent))
             else:
                 current_envs.append(('columns', column_indent))
@@ -90,9 +90,10 @@ def process_file(filename_in, filename_out):
             figure_ratio = figure.group(2)
             figure_fname = figure.group(3)
             figure_rest = figure.group(4)
-            lines.append(indent() +
-                         '\\includegraphics[{}\\columnwidth]{{{}}}{}\n'.format(
-                             figure_ratio, figure_fname, figure_rest))
+            lines.append(
+                indent() +
+                '\\includegraphics[width={}\\columnwidth]{{{}}}{}\n'.format(
+                    figure_ratio, figure_fname, figure_rest))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
