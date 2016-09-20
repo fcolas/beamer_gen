@@ -10,8 +10,8 @@ def process_file(filename_in, filename_out):
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b (.*)$')
     item_re = re.compile(r'^(\s*)- (.*)$')
-    column_re = re.compile(r'^(\s*)c\{(\d*.?\d*)\}$')
-    figure_re = re.compile(r'^(\s*)f\{(\d*.?\d*)\}\{(.*)\}$')
+    column_re = re.compile(r'^(\s*)c\{([^}]*)\}(.*)$')
+    figure_re = re.compile(r'^(\s*)f\{([^}]*)\}\{([^}]*)\}(.*)$')
 
     def indent():
         """Return current indentation prefix."""
@@ -70,6 +70,7 @@ def process_file(filename_in, filename_out):
             column = column_re.match(line)
             column_ratio = column.group(2)
             column_indent = len(column.group(1))
+            column_rest = column.group(3)
             close_envs(column_indent, strict=True)
             if current_envs:
                 if current_envs[-1] != ('columns', column_indent):
@@ -78,15 +79,16 @@ def process_file(filename_in, filename_out):
                     current_envs.append(('columns', column_indent))
             else:
                 current_envs.append(('columns', column_indent))
-            lines.append(indent() + '\\column{{{}\\columnwidth}}\n'.format(
-                column_ratio))
+            lines.append(indent() + '\\column{{{}\\columnwidth}}{}\n'.format(
+                column_ratio, column_rest))
         elif figure_re.match(line):  # figure
             figure = figure_re.match(line)
             figure_ratio = figure.group(2)
             figure_fname = figure.group(3)
+            figure_rest = figure.group(4)
             lines.append(indent() +
-                         '\\includegraphics[{}\\columnwidth]{{{}}}\n'.format(
-                             figure_ratio, figure_fname))
+                         '\\includegraphics[{}\\columnwidth]{{{}}}{}\n'.format(
+                             figure_ratio, figure_fname, figure_rest))
         else:  # default: passthrough
             lines.append(line)
     # close all remaining environments
