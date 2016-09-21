@@ -16,6 +16,7 @@ def process_file(filename_in, filename_out):
     figure_re = re.compile(r'^(\s*)f\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
     end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
+    non_empty_re = re.compile(r'(\s*)\S.*$')
 
     def indent():
         """Return current indentation prefix."""
@@ -95,6 +96,10 @@ def process_file(filename_in, filename_out):
                 '\\includegraphics[width={}\\columnwidth]{{{}}}{}\n'.format(
                     figure_ratio, figure_fname, figure_rest))
         else:  # default: passthrough
+            non_empty = non_empty_re.match(line)
+            if non_empty:
+                non_empty_indent = len(non_empty.group(1))
+                close_envs(non_empty_indent)
             lines.append(line)
     # close all remaining environments
     close_envs()
