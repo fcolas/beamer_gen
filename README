@@ -13,17 +13,18 @@ Features:
 - new columns are introduced with a width (proportion to \columnwidth) by 'c{ratio}'
 - items are introduced by '- item text' with automatic environment creation
 - figures are included by 'f{ratio}{filename}'
+- frames, blocks and items can have the <...> beamer directives: '+<+-> frame title' or '-<+-> item text'
 - everything else is reproduced verbatim
 
 Example:
 """
 + Example 1
-    b Example block
+    b<+-> Example block
         - first item
             - subitem
             - other subitem
         - second item
-    b second block
+    b<+-> second block
         c{0.4}
             f{0.8}{figure1.png}
         c{0.6}
@@ -34,7 +35,7 @@ translates into
 """
 \begin{frame}
     \frametitle{Example 1}
-    \begin{block}
+    \begin{block}<+->
         \begin{itemize}
             \item first item
                 \begin{itemize}
@@ -44,7 +45,7 @@ translates into
             \item second item
         \end{itemize}
     \end{block}
-    \begin{block}
+    \begin{block}<+->
         \begin{columns}
             \column{0.4\columnwidth}
             \includegraphics[width=0.8\columnwidth]{figure1.png}
