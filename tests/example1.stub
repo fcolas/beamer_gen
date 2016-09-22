@@ -1,14 +1,14 @@
 s introduction
 
 + Example 1
-    b Example block
+    b<+-> Example block
         - first item
-            - subitem
-            - other subitem
+            -<+-> subitem
+            -<+-> other subitem
 
 
         - second item
-    b second block
+    b<+-> second block
         c{0.4}
             f{0.8}{figure1.png}\\legend
 
@@ -20,7 +20,7 @@ s introduction
 
     b other block
 
-+ Slide 2
++<+-> Slide 2
     b block
         - 1
         - 2

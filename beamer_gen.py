@@ -8,10 +8,10 @@ import pathlib  # python 3.4
 def process_file(filename_in, filename_out):
     """Actual processing of a file."""
     # regular expressions for various directives
-    frame_re = re.compile(r'^(\s*)\+ (.*)$')
+    frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?) (.*)$')
     section_re = re.compile(r'^s (.*)$')
-    block_re = re.compile(r'^(\s*)b (.*)$')
-    item_re = re.compile(r'^(\s*)- (.*)$')
+    block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
+    item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
     column_re = re.compile(r'^(\s*)c\{([^}]*)\}(.*)$')
     figure_re = re.compile(r'^(\s*)f\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
@@ -41,26 +41,32 @@ def process_file(filename_in, filename_out):
     for line in open(filename_in):
         if frame_re.match(line):  # new frame
             frame = frame_re.match(line)
+            frame_title = frame.group(3)
+            frame_indent = frame.group(1)
+            frame_style = frame.group(2)
             close_envs()  # frame is always top-level environment
-            lines.append(frame.group(1) + '\\begin{frame}\n')
-            current_envs.append(('frame', len(frame.group(1))))
+            lines.append(frame_indent + '\\begin{{frame}}{}\n'.format(
+                frame_style))
+            current_envs.append(('frame', len(frame_indent)))
             lines.append(indent() + '\\frametitle{{{}}}\n'.format(
-                frame.group(2)))
+                frame_title))
         elif section_re.match(line):  # new section
             section = section_re.match(line)
             close_envs()
             lines.append('\\section{{{}}}\n'.format(section.group(1)))
         elif block_re.match(line):  # new block
             block = block_re.match(line)
-            block_name = block.group(2)
+            block_name = block.group(3)
+            block_style = block.group(2)
             block_indent = len(block.group(1))
             close_envs(block_indent)
-            lines.append(indent() + '\\begin{{block}}{{{}}}\n'.format(
-                block_name))
+            lines.append(indent() + '\\begin{{block}}{}{{{}}}\n'.format(
+                block_style, block_name))
             current_envs.append(('block', block_indent))
         elif item_re.match(line):  # new item
             item = item_re.match(line)
-            item_content = item.group(2)
+            item_content = item.group(3)
+            item_style = item.group(2)
             item_indent = len(item.group(1))
             close_envs(item_indent, strict=True)
             if current_envs:
@@ -70,7 +76,8 @@ def process_file(filename_in, filename_out):
                     current_envs.append(('itemize', item_indent))
             else:
                 current_envs.append(('itemize', item_indent))
-            lines.append(indent() + '\\item {}\n'.format(item_content))
+            lines.append(indent() + '\\item{} {}\n'.format(item_style,
+                                                           item_content))
         elif column_re.match(line):  # new column
             column = column_re.match(line)
             column_ratio = column.group(2)
