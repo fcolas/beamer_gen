@@ -43,10 +43,10 @@ def process_file(filename_in, filename_out):
             frame = frame_re.match(line)
             frame_title = frame.group(3)
             frame_indent = frame.group(1)
-            frame_style = frame.group(2)
+            frame_overlay = frame.group(2)
             close_envs()  # frame is always top-level environment
             lines.append(frame_indent + '\\begin{{frame}}{}\n'.format(
-                frame_style))
+                frame_overlay))
             current_envs.append(('frame', len(frame_indent)))
             lines.append(indent() + '\\frametitle{{{}}}\n'.format(
                 frame_title))
@@ -57,16 +57,16 @@ def process_file(filename_in, filename_out):
         elif block_re.match(line):  # new block
             block = block_re.match(line)
             block_name = block.group(3)
-            block_style = block.group(2)
+            block_overlay = block.group(2)
             block_indent = len(block.group(1))
             close_envs(block_indent)
             lines.append(indent() + '\\begin{{block}}{}{{{}}}\n'.format(
-                block_style, block_name))
+                block_overlay, block_name))
             current_envs.append(('block', block_indent))
         elif item_re.match(line):  # new item
             item = item_re.match(line)
             item_content = item.group(3)
-            item_style = item.group(2)
+            item_overlay = item.group(2)
             item_indent = len(item.group(1))
             close_envs(item_indent, strict=True)
             if current_envs:
@@ -76,7 +76,7 @@ def process_file(filename_in, filename_out):
                     current_envs.append(('itemize', item_indent))
             else:
                 current_envs.append(('itemize', item_indent))
-            lines.append(indent() + '\\item{} {}\n'.format(item_style,
+            lines.append(indent() + '\\item{} {}\n'.format(item_overlay,
                                                            item_content))
         elif column_re.match(line):  # new column
             column = column_re.match(line)
@@ -98,15 +98,11 @@ def process_file(filename_in, filename_out):
             figure_ratio = figure.group(3)
             figure_fname = figure.group(4)
             figure_rest = figure.group(5)
-            figure_style = figure.group(2)
-            if figure_style:
-                lines.append(indent() + '\\only{}{{%\n'.format(figure_style))
+            figure_overlay = figure.group(2)
             lines.append(
                 indent() +
-                '\\includegraphics[width={}\\columnwidth]{{{}}}{}\n'.format(
-                    figure_ratio, figure_fname, figure_rest))
-            if figure_style:
-                lines.append(indent() + '}\n')
+                '\\includegraphics{}[width={}\\columnwidth]{{{}}}{}\n'.format(
+                    figure_overlay, figure_ratio, figure_fname, figure_rest))
         else:  # default: passthrough
             non_empty = non_empty_re.match(line)
             if non_empty:
