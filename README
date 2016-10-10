@@ -14,6 +14,7 @@ Features:
 - items are introduced by '- item text' with automatic environment creation
 - figures are included by 'f{ratio}{filename}'
 - frames, blocks and items can have the <...> beamer directives: '+<+-> frame title' or '-<+-> item text'
+- figures can have a beamer directive that will be used for an enclosing \only command
 - everything else is reproduced verbatim
 
 Example:
@@ -26,7 +27,7 @@ Example:
         - second item
     b<+-> second block
         c{0.4}
-            f{0.8}{figure1.png}
+            f<3->{0.8}{figure1.png}
         c{0.6}
             Some generic text:
             - and items
@@ -48,7 +49,9 @@ translates into
     \begin{block}<+->
         \begin{columns}
             \column{0.4\columnwidth}
+            \only<3->{%
             \includegraphics[width=0.8\columnwidth]{figure1.png}
+            }
             \column{0.6\columnwidth}
             Some generic text:
             \begin{itemize}

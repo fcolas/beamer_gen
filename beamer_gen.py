@@ -13,7 +13,7 @@ def process_file(filename_in, filename_out):
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
     column_re = re.compile(r'^(\s*)c\{([^}]*)\}(.*)$')
-    figure_re = re.compile(r'^(\s*)f\{([^}]*)\}\{([^}]*)\}(.*)$')
+    figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
     end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
     non_empty_re = re.compile(r'(\s*)\S.*$')
@@ -95,13 +95,18 @@ def process_file(filename_in, filename_out):
                 column_ratio, column_rest))
         elif figure_re.match(line):  # figure
             figure = figure_re.match(line)
-            figure_ratio = figure.group(2)
-            figure_fname = figure.group(3)
-            figure_rest = figure.group(4)
+            figure_ratio = figure.group(3)
+            figure_fname = figure.group(4)
+            figure_rest = figure.group(5)
+            figure_style = figure.group(2)
+            if figure_style:
+                lines.append(indent() + '\\only{}{{%\n'.format(figure_style))
             lines.append(
                 indent() +
                 '\\includegraphics[width={}\\columnwidth]{{{}}}{}\n'.format(
                     figure_ratio, figure_fname, figure_rest))
+            if figure_style:
+                lines.append(indent() + '}\n')
         else:  # default: passthrough
             non_empty = non_empty_re.match(line)
             if non_empty:
