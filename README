@@ -14,11 +14,12 @@ Features:
 - items are introduced by '- item text' with automatic environment creation
 - figures are included by 'f{ratio}{filename}'
 - frames, blocks, figures and items can have the <...> beamer directives: '+<+-> frame title' or '-<+-> item text'
+- frame can also have options that must be specified after the beamer directive
 - everything else is reproduced verbatim
 
 Example:
 """
-+ Example 1
++[allowframebreaks] Example 1
     b<+-> Example block
         - first item
             - subitem
@@ -33,7 +34,7 @@ Example:
 """
 translates into
 """
-\begin{frame}
+\begin{frame}[allowframebreaks]
     \frametitle{Example 1}
     \begin{block}<+->
         \begin{itemize}

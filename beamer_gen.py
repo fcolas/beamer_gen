@@ -8,7 +8,7 @@ import pathlib  # python 3.4
 def process_file(filename_in, filename_out):
     """Actual processing of a file."""
     # regular expressions for various directives
-    frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?) (.*)$')
+    frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
@@ -41,12 +41,13 @@ def process_file(filename_in, filename_out):
     for line in open(filename_in):
         if frame_re.match(line):  # new frame
             frame = frame_re.match(line)
-            frame_title = frame.group(3)
+            frame_title = frame.group(4)
             frame_indent = frame.group(1)
             frame_overlay = frame.group(2)
+            frame_option = frame.group(3)
             close_envs()  # frame is always top-level environment
-            lines.append(frame_indent + '\\begin{{frame}}{}\n'.format(
-                frame_overlay))
+            lines.append(frame_indent + '\\begin{{frame}}{}{}\n'.format(
+                frame_overlay, frame_option))
             current_envs.append(('frame', len(frame_indent)))
             lines.append(indent() + '\\frametitle{{{}}}\n'.format(
                 frame_title))
