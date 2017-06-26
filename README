@@ -36,7 +36,7 @@ translates into
 """
 \begin{frame}[allowframebreaks]
     \frametitle{Example 1}
-    \begin{block}<+->
+    \begin{block}<+->{Example block}
         \begin{itemize}
             \item first item
                 \begin{itemize}
@@ -46,7 +46,7 @@ translates into
             \item second item
         \end{itemize}
     \end{block}
-    \begin{block}<+->
+    \begin{block}<+->{second block}
         \begin{columns}
             \column{0.4\columnwidth}
             \includegraphics<3->[width=0.8\columnwidth]{figure1.png}
