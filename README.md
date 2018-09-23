@@ -46,7 +46,7 @@ Usage is straightforward:
     optional arguments:
       -h, --help  show this help message and exit
 
-Each file is processed and its extension is replaced by ``.tex``
+Each file is processed by creating a new file with the original extension replaced by ``.tex``.
 
 
 Example
@@ -55,18 +55,18 @@ Example
 The following source:
 
 ```
-    +[allowframebreaks] Example 1
-        b<+-> Example block
-            - first item
-                - subitem
-                - other subitem
-            - second item
-        b<+-> second block
-            c{0.4}
-                f<3->{0.8}{figure1.png}
-            c{0.6}
-                Some generic text:
-                - and items
++[allowframebreaks] Example 1
+    b<+-> Example block
+        - first item
+            - subitem
+            - other subitem
+        - second item
+    b<+-> second block
+        c{0.4}
+            f<3->{0.8}{figure1.png}
+        c{0.6}
+            Some generic text:
+            - and items
 ```
 
 translates into:
