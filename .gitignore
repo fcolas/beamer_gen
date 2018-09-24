@@ -1,3 +1,10 @@
+# temporary files
 *~
 .*.sw[op]
+# compiled files
 *.pyc
+__pycache__/
+# packaging
+build/
+dist/
+*.egg-info
