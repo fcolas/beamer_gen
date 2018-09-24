@@ -4,6 +4,8 @@ import re
 import argparse
 import pathlib  # python 3.4
 
+__version__ = '1.0.0rc2'
+
 
 def process_file(filename_in, filename_out):
     """Actual processing of a file."""
@@ -130,7 +132,7 @@ def process_file(filename_in, filename_out):
 def main():
     """Command line parsing."""
     parser = argparse.ArgumentParser(
-        description='Generate LaTeX/beamer files from a stub.')
+        description='Generate LaTeX/beamer files from more compact files.')
     parser.add_argument('filenames', metavar='filename', type=str, nargs='+',
                         help='name of the file to be processed.')
     args = parser.parse_args(sys.argv[1:])
