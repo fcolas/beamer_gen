@@ -33,3 +33,6 @@ s Conclusion
 
 +<+->[fragile] Example 2
     f<+->{0.8}{figure2.png}\\some attached text
+
++[plain]
+    \titlepage

@@ -10,7 +10,7 @@ __version__ = '1.0.0'
 def process_file(filename_in, filename_out):
     """Actual processing of a file."""
     # regular expressions for various directives
-    frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
+    frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?)((?:\[[^\]]*\])?) ?(.*)$')
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
@@ -51,8 +51,9 @@ def process_file(filename_in, filename_out):
             lines.append(frame_indent + '\\begin{{frame}}{}{}\n'.format(
                 frame_overlay, frame_option))
             current_envs.append(('frame', len(frame_indent)))
-            lines.append(indent() + '\\frametitle{{{}}}\n'.format(
-                frame_title))
+            if frame_title:
+                lines.append(indent() + '\\frametitle{{{}}}\n'.format(
+                    frame_title))
         elif section_re.match(line):  # new section
             section = section_re.match(line)
             close_envs()
