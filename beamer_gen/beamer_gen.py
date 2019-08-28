@@ -14,7 +14,7 @@ def process_file(filename_in, filename_out):
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
-    column_re = re.compile(r'^(\s*)c\{([^}]*)\}(.*)$')
+    column_re = re.compile(r'^(\s*)c((?:\[[^\]]*\])?)\{([^}]*)\}(.*)$')
     figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
     end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
@@ -84,9 +84,10 @@ def process_file(filename_in, filename_out):
                                                            item_content))
         elif column_re.match(line):  # new column
             column = column_re.match(line)
-            column_ratio = column.group(2)
             column_indent = len(column.group(1))
-            column_rest = column.group(3)
+            column_align = column.group(2)
+            column_ratio = column.group(3)
+            column_rest = column.group(4)
             close_envs(column_indent, strict=True)
             if current_envs:
                 if current_envs[-1] != ('columns', column_indent):
@@ -95,8 +96,8 @@ def process_file(filename_in, filename_out):
                     current_envs.append(('columns', column_indent))
             else:
                 current_envs.append(('columns', column_indent))
-            lines.append(indent() + '\\column{{{}\\columnwidth}}{}\n'.format(
-                column_ratio, column_rest))
+            lines.append(indent() + '\\column{}{{{}\\columnwidth}}{}\n'.format(
+                column_align, column_ratio, column_rest))
         elif figure_re.match(line):  # figure
             figure = figure_re.match(line)
             figure_ratio = figure.group(3)
@@ -139,6 +140,7 @@ def main():
     args = parser.parse_args(sys.argv[1:])
     for fn in args.filenames:
         process_file(fn, str(pathlib.Path(fn).with_suffix('.tex')))
+
 
 if __name__ == '__main__':
     main()

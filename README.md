@@ -27,6 +27,7 @@ Features
 
 Beamer overlay directives (``<...>``) are supported for frames, blocks, figures and items.
 Frames can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title`` for instance).
+Columns can also have a placement option (e.g. ``[c]``), which needs to be specified before the size.
 
 Everything else is reproduced verbatim.
 
@@ -64,7 +65,7 @@ The following source:
     b<+-> second block
         c{0.4}
             f<3->{0.8}{figure1.png}
-        c{0.6}
+        c[t]{0.6}
             Some generic text:
             - and items
 ```
@@ -88,7 +89,7 @@ translates into:
         \begin{columns}
             \column{0.4\columnwidth}
             \includegraphics<3->[width=0.8\columnwidth]{figure1.png}
-            \column{0.6\columnwidth}
+            \column[t]{0.6\columnwidth}
             Some generic text:
             \begin{itemize}
                 \item and items

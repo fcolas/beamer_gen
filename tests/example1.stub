@@ -36,3 +36,9 @@ s Conclusion
 
 +[plain]
     \titlepage
+
++ Test column alignment
+    c[t]{0.4}
+        Some paragraph
+    c[c]{0.6}
+        Some other paragraph
