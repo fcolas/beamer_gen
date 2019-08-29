@@ -4,7 +4,7 @@ import re
 import argparse
 import pathlib  # python 3.4
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 
 def process_file(filename_in, filename_out):
