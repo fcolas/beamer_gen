@@ -5,13 +5,14 @@ Preprocessor to generate LaTeX-beamer code from a more compact language.
 
 The needs for a new sub language were:
 
-- compactness: so as to remove type as few formatting informations as possible,
+- compactness: so as to type as few formatting informations as possible,
 - expressiveness: allow to format most beamer frames with clear and short syntax,
-- flexibility: allowance for LaTeX without to much overhead.
+- flexibility: allowance for LaTeX without too much overhead.
 
-In TeX environments, are enclosed into ``\begin{env}`` and ``\end{env}`` tags which makes it unambiguous but requires duplicating the name of the environment.
+In TeX, environments are enclosed into ``\begin{env}`` and ``\end{env}`` tags which makes it unambiguous but requires duplicating the name of the environment.
 Here, for compactness, the choice is made instead to use indentation as environment markers.
 Indentation is therefore significant and compulsory.
+
 
 Features
 --------
@@ -26,7 +27,7 @@ Features
 - figures, using ``f{ratio}{filename}`` (ratio relative to ``\columnwidth``).
 
 Beamer overlay directives (``<...>``) are supported for frames, blocks, figures and items.
-Frames can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title`` for instance).
+Frames and items can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title``, or ``-<+->[\square] item`` for instance).
 Columns can also have a placement option (e.g. ``[c]``), which needs to be specified before the size.
 
 Everything else is reproduced verbatim.
@@ -62,6 +63,7 @@ The following source:
             - subitem
             - other subitem
         - second item
+        -<2>[!] third item
     b<+-> second block
         c{0.4}
             f<3->{0.8}{figure1.png}
@@ -83,6 +85,7 @@ translates into:
                     \item other subitem
                 \end{itemize}
             \item second item
+            \item<2>[!] third item
         \end{itemize}
     \end{block}
     \begin{block}<+->{second block}

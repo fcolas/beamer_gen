@@ -8,6 +8,7 @@ s introduction
 
 
         - second item
+        -<2>[!] third item
     b<+-> second block
         c{0.4}
             f{0.8}{figure1.png}\\legend
