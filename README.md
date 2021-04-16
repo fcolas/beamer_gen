@@ -26,7 +26,11 @@ Features
 - columns, using ``c{ratio}`` (ratio relative to ``\columnwidth``) with automatic environment creation,
 - figures, using ``f{ratio}{filename}`` (ratio relative to ``\columnwidth``).
 
-Beamer overlay directives (``<...>``) are supported for frames, blocks, figures and items.
+In addition, options can be placed to some environments that are implicitly defined by inserting them before:
+
+- itemize, using ``{itemize} options``
+
+Beamer overlay directives (``<...>``) are supported for most elements.
 Frames and items can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title``, or ``-<+->[\square] item`` for instance).
 Columns can also have a placement option (e.g. ``[c]``), which needs to be specified before the size.
 
@@ -69,7 +73,9 @@ The following source:
             f<3->{0.8}{figure1.png}
         c[t]{0.6}
             Some generic text:
-            - and items
+            {itemize}<+-> \itemsep 1.5em
+            - and
+            - items
 ```
 
 translates into:
@@ -94,8 +100,9 @@ translates into:
             \includegraphics<3->[width=0.8\columnwidth]{figure1.png}
             \column[t]{0.6\columnwidth}
             Some generic text:
-            \begin{itemize}
-                \item and items
+            \begin{itemize}<+-> \itemsep 1.5em
+                \item and
+                \item items
             \end{itemize}
         \end{columns}
     \end{block}
