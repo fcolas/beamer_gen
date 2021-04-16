@@ -19,6 +19,8 @@ def process_file(filename_in, filename_out):
     empty_re = re.compile(r'^\s*$')
     end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
     non_empty_re = re.compile(r'(\s*)\S.*$')
+    # environments
+    itemize_re = re.compile(r'^(\s*)\{itemize\}((?:<[^>]*>)?) ?(.*)$')
 
     def indent():
         """Return current indentation prefix."""
@@ -110,6 +112,16 @@ def process_file(filename_in, filename_out):
                 indent() +
                 '\\includegraphics{}[width={}\\columnwidth]{{{}}}{}\n'.format(
                     figure_overlay, figure_ratio, figure_fname, figure_rest))
+        elif itemize_re.match(line):  # itemize environment
+            itemize = itemize_re.match(line)
+            itemize_content = itemize.group(3)
+            itemize_overlay = itemize.group(2)
+            itemize_indent = len(itemize.group(1))
+            close_envs(itemize_indent)
+            lines.append(indent() + '\\begin{{itemize}}{} {}\n'.format(
+                itemize_overlay,
+                itemize_content))
+            current_envs.append(('itemize', itemize_indent))
         else:  # default: passthrough
             non_empty = non_empty_re.match(line)
             if non_empty:
