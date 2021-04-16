@@ -5,13 +5,14 @@ Preprocessor to generate LaTeX-beamer code from a more compact language.
 
 The needs for a new sub language were:
 
-- compactness: so as to remove type as few formatting informations as possible,
+- compactness: so as to type as few formatting informations as possible,
 - expressiveness: allow to format most beamer frames with clear and short syntax,
-- flexibility: allowance for LaTeX without to much overhead.
+- flexibility: allowance for LaTeX without too much overhead.
 
-In TeX environments, are enclosed into ``\begin{env}`` and ``\end{env}`` tags which makes it unambiguous but requires duplicating the name of the environment.
+In TeX, environments are enclosed into ``\begin{env}`` and ``\end{env}`` tags which makes it unambiguous but requires duplicating the name of the environment.
 Here, for compactness, the choice is made instead to use indentation as environment markers.
 Indentation is therefore significant and compulsory.
+
 
 Features
 --------
