@@ -43,3 +43,27 @@ s Conclusion
         Some paragraph
     c[c]{0.6}
         Some other paragraph
+
++ Test itemize
+    {itemize}
+    - item1
+    - item2
+    {itemize}
+    - item1
+    - item2
+
+    b block
+        {itemize}<+->
+        - item1
+            - subitem
+        - item2
+            {itemize}<+->
+
+    b new block
+        {itemize} \itemsep 1.5em
+        - item1
+        - item2
+
+        {itemize}<+-> \itemsep 1.5ex
+        - item1
+        - item2
