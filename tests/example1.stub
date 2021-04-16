@@ -44,6 +44,13 @@ s Conclusion
     c[c]{0.6}
         Some other paragraph
 
++ Test columnS alignment
+    {columns}[T]
+    c[t]{0.4}
+        Some paragraph
+    c[c]{0.6}
+        Some other paragraph and an image
+
 + Test itemize
     {itemize}
     - item1

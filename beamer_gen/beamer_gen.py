@@ -21,6 +21,7 @@ def process_file(filename_in, filename_out):
     non_empty_re = re.compile(r'(\s*)\S.*$')
     # environments
     itemize_re = re.compile(r'^(\s*)\{itemize\}((?:<[^>]*>)?) ?(.*)$')
+    columns_re = re.compile(r'^(\s*)\{columns\}((?:\[[^\]]*\])?)(.*)$')
 
     def indent():
         """Return current indentation prefix."""
@@ -114,14 +115,23 @@ def process_file(filename_in, filename_out):
                     figure_overlay, figure_ratio, figure_fname, figure_rest))
         elif itemize_re.match(line):  # itemize environment
             itemize = itemize_re.match(line)
-            itemize_content = itemize.group(3)
-            itemize_overlay = itemize.group(2)
             itemize_indent = len(itemize.group(1))
+            itemize_overlay = itemize.group(2)
+            itemize_content = itemize.group(3)
             close_envs(itemize_indent)
             lines.append(indent() + '\\begin{{itemize}}{} {}\n'.format(
                 itemize_overlay,
                 itemize_content))
             current_envs.append(('itemize', itemize_indent))
+        elif columns_re.match(line):  # columns environment
+            columns = columns_re.match(line)
+            columns_indent = len(columns.group(1))
+            columns_options = columns.group(2)
+            columns_rest = columns.group(3)
+            close_envs(columns_indent)
+            lines.append(indent() + '\\begin{{columns}}{} {}\n'.format(
+                columns_options, columns_rest))
+            current_envs.append(('columns', columns_indent))
         else:  # default: passthrough
             non_empty = non_empty_re.match(line)
             if non_empty:

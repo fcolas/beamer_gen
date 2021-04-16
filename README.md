@@ -28,7 +28,9 @@ Features
 
 In addition, options can be placed to some environments that are implicitly defined by inserting them before:
 
-- itemize, using ``{itemize} options``
+- itemize, using ``{itemize} commands``
+- columns, using ``{columns}[options]``
+
 
 Beamer overlay directives (``<...>``) are supported for most elements.
 Frames and items can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title``, or ``-<+->[\square] item`` for instance).
@@ -69,6 +71,7 @@ The following source:
         - second item
         -<2>[!] third item
     b<+-> second block
+        {columns}[T]
         c{0.4}
             f<3->{0.8}{figure1.png}
         c[t]{0.6}
@@ -95,7 +98,7 @@ translates into:
         \end{itemize}
     \end{block}
     \begin{block}<+->{second block}
-        \begin{columns}
+        \begin{columns}[T]
             \column{0.4\columnwidth}
             \includegraphics<3->[width=0.8\columnwidth]{figure1.png}
             \column[t]{0.6\columnwidth}
