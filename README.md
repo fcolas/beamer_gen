@@ -26,7 +26,7 @@ Features
 - figures, using ``f{ratio}{filename}`` (ratio relative to ``\columnwidth``).
 
 Beamer overlay directives (``<...>``) are supported for frames, blocks, figures and items.
-Frames can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title`` for instance).
+Frames and items can also have options (``[...]``), in which case, they must be specified after an optional beamer directive (``+<+->[fragile] Title``, or ``-<+->[\square] item`` for instance).
 Columns can also have a placement option (e.g. ``[c]``), which needs to be specified before the size.
 
 Everything else is reproduced verbatim.
@@ -62,6 +62,7 @@ The following source:
             - subitem
             - other subitem
         - second item
+        -<2>[!] third item
     b<+-> second block
         c{0.4}
             f<3->{0.8}{figure1.png}
@@ -83,6 +84,7 @@ translates into:
                     \item other subitem
                 \end{itemize}
             \item second item
+            \item<2>[!] third item
         \end{itemize}
     \end{block}
     \begin{block}<+->{second block}
