@@ -4,7 +4,7 @@ import re
 import argparse
 import pathlib  # python 3.4
 
-__version__ = '1.2.0'
+__version__ = '1.3.0-pre'
 
 
 def process_file(filename_in, filename_out):
@@ -13,7 +13,7 @@ def process_file(filename_in, filename_out):
     frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?)((?:\[[^\]]*\])?) ?(.*)$')
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
-    item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?) (.*)$')
+    item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     column_re = re.compile(r'^(\s*)c((?:\[[^\]]*\])?)\{([^}]*)\}(.*)$')
     figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
@@ -69,7 +69,8 @@ def process_file(filename_in, filename_out):
             current_envs.append(('block', block_indent))
         elif item_re.match(line):  # new item
             item = item_re.match(line)
-            item_content = item.group(3)
+            item_content = item.group(4)
+            item_label = item.group(3)
             item_overlay = item.group(2)
             item_indent = len(item.group(1))
             close_envs(item_indent, strict=True)
@@ -80,8 +81,9 @@ def process_file(filename_in, filename_out):
                     current_envs.append(('itemize', item_indent))
             else:
                 current_envs.append(('itemize', item_indent))
-            lines.append(indent() + '\\item{} {}\n'.format(item_overlay,
-                                                           item_content))
+            lines.append(indent() + '\\item{}{} {}\n'.format(item_overlay,
+                                                             item_label,
+                                                             item_content))
         elif column_re.match(line):  # new column
             column = column_re.match(line)
             column_indent = len(column.group(1))
