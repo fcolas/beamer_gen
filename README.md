@@ -22,7 +22,8 @@ Features
 - sections, using ``s Section title``,
 - frames, using ``+ Frame title``,
 - blocks, using ``b Block title``,
-- items, using ``- item text`` with automatic environment creation,
+- itemize, using ``- item text`` with automatic environment creation,
+- enumerate, using ``# item text`` with automatic environment creation,
 - columns, using ``c{ratio}`` (ratio relative to ``\columnwidth``) with automatic environment creation,
 - figures, using ``f{ratio}{filename}`` (ratio relative to ``\columnwidth``).
 
@@ -66,8 +67,8 @@ The following source:
 +[allowframebreaks] Example 1
     b<+-> Example block
         - first item
-            - subitem
-            - other subitem
+            # subitem in enumerate
+            # other subitem
         - second item
         -<2>[!] third item
     b<+-> second block
@@ -89,10 +90,10 @@ translates into:
     \begin{block}<+->{Example block}
         \begin{itemize}
             \item first item
-                \begin{itemize}
-                    \item subitem
-                    \item other subitem
-                \end{itemize}
+            \begin{enumerate}
+                \item subitem
+                \item other subitem
+            \end{enumerate}
             \item second item
             \item<2>[!] third item
         \end{itemize}
