@@ -23,6 +23,7 @@ def process_file(filename_in, filename_out):
     # environments
     itemize_re = re.compile(r'^(\s*)\{itemize\}((?:<[^>]*>)?) ?(.*)$')
     columns_re = re.compile(r'^(\s*)\{columns\}((?:\[[^\]]*\])?)(.*)$')
+    enumerate_re = re.compile(r'^(\s*)\{enumerate\}((?:<[^>]*>)?) ?(.*)$')
 
     def indent():
         """Return current indentation prefix."""
@@ -141,6 +142,16 @@ def process_file(filename_in, filename_out):
                 itemize_overlay,
                 itemize_content))
             current_envs.append(('itemize', itemize_indent))
+        elif enumerate_re.match(line):  # enumerate environment
+            enumerate = enumerate_re.match(line)
+            enumerate_indent = len(enumerate.group(1))
+            enumerate_overlay = enumerate.group(2)
+            enumerate_content = enumerate.group(3)
+            close_envs(enumerate_indent)
+            lines.append(indent() + '\\begin{{enumerate}}{} {}\n'.format(
+                enumerate_overlay,
+                enumerate_content))
+            current_envs.append(('enumerate', enumerate_indent))
         elif columns_re.match(line):  # columns environment
             columns = columns_re.match(line)
             columns_indent = len(columns.group(1))
