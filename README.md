@@ -80,6 +80,9 @@ The following source:
             {itemize}<+-> \itemsep 1.5em
             - and
             - items
+            {enumerate}<+->
+            # and numbered
+            # items
 ```
 
 translates into:
@@ -108,6 +111,10 @@ translates into:
                 \item and
                 \item items
             \end{itemize}
+            \begin{enumerate}<+->
+                \item and numbered
+                \item items
+            \end{enumerate}
         \end{columns}
     \end{block}
 \end{frame}
