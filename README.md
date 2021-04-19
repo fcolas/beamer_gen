@@ -94,7 +94,7 @@ translates into:
         \begin{itemize}
             \item first item
             \begin{enumerate}
-                \item subitem
+                \item subitem in enumerate
                 \item other subitem
             \end{enumerate}
             \item second item
