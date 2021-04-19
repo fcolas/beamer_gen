@@ -74,3 +74,19 @@ s Conclusion
         {itemize}<+-> \itemsep 1.5ex
         - item1
         - item2
+
++ Test enumerate
+    #<+-> item 1.
+    #<+->[B.] item 2.
+
+    b block
+        - item
+        # item in other environment
+            # subitem
+        - and
+            # vice
+            - versa
+
+    {enumerate}<+->
+    # other
+    # items

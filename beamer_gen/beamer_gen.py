@@ -14,6 +14,7 @@ def process_file(filename_in, filename_out):
     section_re = re.compile(r'^s (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
+    enumitem_re = re.compile(r'^(\s*)#((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     column_re = re.compile(r'^(\s*)c((?:\[[^\]]*\])?)\{([^}]*)\}(.*)$')
     figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)\{([^}]*)\}\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
@@ -22,6 +23,7 @@ def process_file(filename_in, filename_out):
     # environments
     itemize_re = re.compile(r'^(\s*)\{itemize\}((?:<[^>]*>)?) ?(.*)$')
     columns_re = re.compile(r'^(\s*)\{columns\}((?:\[[^\]]*\])?)(.*)$')
+    enumerate_re = re.compile(r'^(\s*)\{enumerate\}((?:<[^>]*>)?) ?(.*)$')
 
     def indent():
         """Return current indentation prefix."""
@@ -87,6 +89,23 @@ def process_file(filename_in, filename_out):
             lines.append(indent() + '\\item{}{} {}\n'.format(item_overlay,
                                                              item_label,
                                                              item_content))
+        elif enumitem_re.match(line):  # new item from enumerate
+            item = enumitem_re.match(line)
+            item_content = item.group(4)
+            item_label = item.group(3)
+            item_overlay = item.group(2)
+            item_indent = len(item.group(1))
+            close_envs(item_indent, strict=True)
+            if current_envs:
+                if current_envs[-1] != ('enumerate', item_indent):
+                    close_envs(item_indent)
+                    lines.append(indent() + '\\begin{enumerate}\n')
+                    current_envs.append(('enumerate', item_indent))
+            else:
+                current_envs.append(('enumerate', item_indent))
+            lines.append(indent() + '\\item{}{} {}\n'.format(item_overlay,
+                                                             item_label,
+                                                             item_content))
         elif column_re.match(line):  # new column
             column = column_re.match(line)
             column_indent = len(column.group(1))
@@ -123,6 +142,16 @@ def process_file(filename_in, filename_out):
                 itemize_overlay,
                 itemize_content))
             current_envs.append(('itemize', itemize_indent))
+        elif enumerate_re.match(line):  # enumerate environment
+            enumerate = enumerate_re.match(line)
+            enumerate_indent = len(enumerate.group(1))
+            enumerate_overlay = enumerate.group(2)
+            enumerate_content = enumerate.group(3)
+            close_envs(enumerate_indent)
+            lines.append(indent() + '\\begin{{enumerate}}{} {}\n'.format(
+                enumerate_overlay,
+                enumerate_content))
+            current_envs.append(('enumerate', enumerate_indent))
         elif columns_re.match(line):  # columns environment
             columns = columns_re.match(line)
             columns_indent = len(columns.group(1))
