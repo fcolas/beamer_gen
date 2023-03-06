@@ -90,3 +90,10 @@ s Conclusion
     {enumerate}<+->
     # other
     # items
+
++ Test dedent f
+    b block
+        - item
+            f{1}{fig.pdf}
+        f{1}{fig.pdf}
+    f{1}{fig.pdf}
