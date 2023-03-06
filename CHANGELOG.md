@@ -1,6 +1,12 @@
 Changelog for beamer_gen
 ========================
 
+1.3.1 (2023-03-06)
+------------------
+
+* fix environment closing with f (#15)
+
+
 1.3.0 (2021-04-19)
 ------------------
 * support for enumerate
