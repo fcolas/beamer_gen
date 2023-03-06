@@ -25,7 +25,7 @@ Features
 - itemize, using ``- item text`` with automatic environment creation,
 - enumerate, using ``# item text`` with automatic environment creation,
 - columns, using ``c{ratio}`` (ratio relative to ``\columnwidth``) with automatic environment creation,
-- figures, using ``f{ratio}{filename}`` (ratio relative to ``\columnwidth``).
+- figures, using ``f{ratio}[options]{filename}`` (ratio relative to ``\columnwidth``).
 
 In addition, options can be placed to some environments that are implicitly defined by inserting them before:
 
@@ -74,7 +74,7 @@ The following source:
     b<+-> second block
         {columns}[T]
         c{0.4}
-            f<3->{0.8}{figure1.png}
+            f<3->{0.8}{figure1.png}\\caption text
         c[t]{0.6}
             Some generic text:
             {itemize}<+-> \itemsep 1.5em
@@ -83,6 +83,7 @@ The following source:
             {enumerate}<+->
             # and numbered
             # items
+    f{1}[draft]{figure2.png}
 ```
 
 translates into:
@@ -104,7 +105,7 @@ translates into:
     \begin{block}<+->{second block}
         \begin{columns}[T]
             \column{0.4\columnwidth}
-            \includegraphics<3->[width=0.8\columnwidth]{figure1.png}
+            \includegraphics<3->[width=0.8\columnwidth]{figure1.png}\\caption text
             \column[t]{0.6\columnwidth}
             Some generic text:
             \begin{itemize}<+-> \itemsep 1.5em
@@ -117,5 +118,6 @@ translates into:
             \end{enumerate}
         \end{columns}
     \end{block}
+    \includegraphics[width=1\columnwidth,draft]{figure2.png}
 \end{frame}
 ```
