@@ -124,10 +124,12 @@ def process_file(filename_in, filename_out):
                 column_align, column_ratio, column_rest))
         elif figure_re.match(line):  # figure
             figure = figure_re.match(line)
+            figure_indent = len(figure.group(1))
             figure_ratio = figure.group(3)
             figure_fname = figure.group(4)
             figure_rest = figure.group(5)
             figure_overlay = figure.group(2)
+            close_envs(figure_indent)
             lines.append(
                 indent() +
                 '\\includegraphics{}[width={}\\columnwidth]{{{}}}{}\n'.format(
