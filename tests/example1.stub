@@ -96,4 +96,7 @@ s Conclusion
         - item
             f{1}{fig.pdf}
         f{1}{fig.pdf}
-    f{1}{fig.pdf}
+
++ Test figure options
+    f{0.45}{fig.pdf}
+    f{0.45}[draft]{fig.pdf}
