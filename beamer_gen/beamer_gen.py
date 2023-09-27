@@ -12,6 +12,7 @@ def process_file(filename_in, filename_out):
     # regular expressions for various directives
     frame_re = re.compile(r'^(\s*)\+((?:<[^>]*>)?)((?:\[[^\]]*\])?) ?(.*)$')
     section_re = re.compile(r'^s (.*)$')
+    subsection_re = re.compile(r'^ss (.*)$')
     block_re = re.compile(r'^(\s*)b((?:<[^>]*>)?) (.*)$')
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     enumitem_re = re.compile(r'^(\s*)#((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
@@ -64,6 +65,10 @@ def process_file(filename_in, filename_out):
             section = section_re.match(line)
             close_envs()
             lines.append('\\section{{{}}}\n'.format(section.group(1)))
+        elif subsection_re.match(line):  # new subsection
+            subsection = subsection_re.match(line)
+            close_envs()
+            lines.append('\\subsection{{{}}}\n'.format(subsection.group(1)))
         elif block_re.match(line):  # new block
             block = block_re.match(line)
             block_name = block.group(3)
