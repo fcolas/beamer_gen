@@ -20,6 +20,7 @@ Features
 ``beamer_gen`` code has shortcuts for the following current LaTeX/beamer features:
 
 - sections, using ``s Section title``,
+- subsections, using ``ss Subsection title``,
 - frames, using ``+ Frame title``,
 - blocks, using ``b Block title``,
 - itemize, using ``- item text`` with automatic environment creation,
