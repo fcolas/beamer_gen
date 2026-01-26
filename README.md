@@ -26,7 +26,7 @@ Features
 - itemize, using ``- item text`` with automatic environment creation,
 - enumerate, using ``# item text`` with automatic environment creation,
 - columns, using ``c{ratio}`` (ratio relative to ``\columnwidth``) with automatic environment creation,
-- figures, using ``f{ratio}[options]{filename}`` (ratio relative to ``\columnwidth``).
+- figures, using ``f{ratio}[options]{filename}`` (ratio relative to ``\columnwidth``, it can be omitted).
 
 In addition, options can be placed to some environments that are implicitly defined by inserting them before:
 
@@ -85,6 +85,8 @@ The following source:
             # and numbered
             # items
     f{1}[draft]{figure2.png}
+
+    f<4>[height=2cm]{figure3.png}
 ```
 
 translates into:
@@ -120,5 +122,7 @@ translates into:
         \end{columns}
     \end{block}
     \includegraphics[width=1\columnwidth,draft]{figure2.png}
+
+    \includegraphics[height=2cm]{figure3.png}
 \end{frame}
 ```

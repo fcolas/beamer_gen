@@ -4,7 +4,7 @@ import re
 import argparse
 import pathlib  # python 3.4
 
-__version__ = '1.5.0'
+__version__ = '1.6.0'
 
 
 def process_file(filename_in, filename_out):
@@ -17,8 +17,8 @@ def process_file(filename_in, filename_out):
     item_re = re.compile(r'^(\s*)-((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     enumitem_re = re.compile(r'^(\s*)#((?:<[^>]*>)?)((?:\[[^\]]*\])?) (.*)$')
     column_re = re.compile(r'^(\s*)c((?:\[[^\]]*\])?)\{([^}]*)\}(.*)$')
-    figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)\{([^}]*)\}(?:\[([^\]]*)\])?'
-                           r'\{([^}]*)\}(.*)$')
+    figure_re = re.compile(r'^(\s*)f((?:<[^>]*>)?)(?:\{([^}]*)\})?'
+                           r'(?:\[([^\]]*)\])?\{([^}]*)\}(.*)$')
     empty_re = re.compile(r'^\s*$')
     end_re = re.compile(r'^\s*\\end\{[^}]*\}.*$')
     non_empty_re = re.compile(r'(\s*)\S.*$')
@@ -135,18 +135,22 @@ def process_file(filename_in, filename_out):
             figure_fname = figure.group(5)
             figure_rest = figure.group(6)
             figure_overlay = figure.group(2)
-            figure_options = figure.group(4)
-            if figure_options is None:
-                figure_options = ''
-            else:
-                figure_options = ',' + figure_options
+            figure_other_options = figure.group(4)
+            option_list = []
+            if figure_ratio is not None:
+                option_list.append(
+                    'width={}\\columnwidth'.format(figure_ratio))
+            if figure_other_options is not None:
+                option_list.append(figure_other_options)
+            figure_options = ','.join(option_list)
+            if figure_options:
+                figure_options = '[{}]'.format(figure_options)
             close_envs(figure_indent)
             lines.append(
                 indent() +
-                '\\includegraphics{}[width={}\\columnwidth{}]{{{}}}{}\n'
+                '\\includegraphics{}{}{{{}}}{}\n'
                 .format(
-                    figure_overlay, figure_ratio, figure_options,
-                    figure_fname, figure_rest))
+                    figure_overlay, figure_options, figure_fname, figure_rest))
         elif itemize_re.match(line):  # itemize environment
             itemize = itemize_re.match(line)
             itemize_indent = len(itemize.group(1))
