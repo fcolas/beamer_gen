@@ -1,6 +1,12 @@
 Changelog for beamer_gen
 ========================
 
+1.6.0 (2026-01-26)
+------------------
+
+* optional width in figures (so as to specify height and keep ratio)
+
+
 1.5.0 (2023-09-27)
 ------------------
 
