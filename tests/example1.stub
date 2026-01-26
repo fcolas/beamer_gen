@@ -103,3 +103,5 @@ s Conclusion
 + Test figure options
     f{0.45}{fig.pdf}
     f{0.45}[draft]{fig.pdf}
+    f[height=2cm]{fig.pdf}
+    f{fig.pdf}
